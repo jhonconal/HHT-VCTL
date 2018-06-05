@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>574</width>
-    <height>40</height>
+    <width>588</width>
+    <height>45</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -16,8 +16,14 @@
     <height>45</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <family>Impact</family>
+    <pointsize>12</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>EXTERNAL STORGE DEVICE </string>
+   <string>External storage devices scan</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <property name="leftMargin">

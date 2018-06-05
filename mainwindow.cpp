@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    this->quazip_test();
+//    this->quazip_test();
     ui->setupUi(this);
     mGetUsbDiskWidget = new GetUsbDiskWidget();
     connect(mGetUsbDiskWidget,SIGNAL(select_disk_signals(QString)),this,SLOT(select_disk_slot(QString)));

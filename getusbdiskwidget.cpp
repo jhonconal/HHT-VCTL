@@ -7,7 +7,11 @@ GetUsbDiskWidget::GetUsbDiskWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     this->Init();
-    setWindowFlags(Qt::WindowStaysOnTopHint|(this->windowFlags()&~Qt::WindowMinMaxButtonsHint|Qt::WindowMaximizeButtonHint));//窗口置顶
+    //子窗口置顶父窗口技巧
+    this->hide();
+    setWindowFlags((Qt::WindowStaysOnTopHint|this->windowFlags())
+                   &~Qt::WindowMinMaxButtonsHint);//窗口置顶 隐藏最大最小按钮
+    this->show();
 }
 
 GetUsbDiskWidget::~GetUsbDiskWidget()
@@ -18,9 +22,15 @@ GetUsbDiskWidget::~GetUsbDiskWidget()
 void GetUsbDiskWidget::on_checkButton_clicked()
 {
     //发送选择信号
+#if 0
     QString  selectDisk = ui->comboBox_USB->currentText();
     qDebug()<<">>>"<<selectDisk;
     emit select_disk_signals(selectDisk);
+#else
+    QString  selectDisk = ui->comboBox_USB->currentText();
+    qDebug()<<">>>"<<selectDisk.mid(0,2);  //例如：I: ( 7.24365 GB/6.8998 GB )  --> I:
+    emit select_disk_signals(selectDisk.mid(0,2));
+#endif
 }
 
 //=================================================================================
@@ -81,7 +91,14 @@ void GetUsbDiskWidget::AddDisk(QString &DiskName)
     usbtemp.DirPath = DiskName;
     GetMemorySize(usbtemp);//获取设备内存信息
     this->usb_disk_info.push_back(usbtemp);
+#if SHOW_LESS_INFO
     this->AddComboBoxItem(DiskName);
+#else
+    QString totalMemory =QString("%1 GB").arg(usbtemp.TotalMemory);
+    QString freeMemory =QString("%1 GB").arg(usbtemp.FreeMemory);
+    QString &info = (QString &)(DiskName+" ( "+totalMemory+"/"+freeMemory+" ) ");
+    this->AddComboBoxItem(info);
+#endif
 }
 //=================================================================================
 //删除移动设备
@@ -92,7 +109,20 @@ void GetUsbDiskWidget::DeleteDisk(QString &DiskName)
     if(SearchDisk(DiskName,iter))
     {
         this->usb_disk_info.remove(iter);
+#if SHOW_LESS_INFO
         this->DeleteComboBoxItem(DiskName);
+#else
+        for(int i=0;i<ui->comboBox_USB->count();i++)
+        {
+            if(ui->comboBox_USB->itemText(i).contains(DiskName))
+            {
+                QString item =ui->comboBox_USB->itemText(i);
+                QString &itemInfo = (QString&)item;
+                this->DeleteComboBoxItem(itemInfo);
+                break;
+            }
+        }
+#endif
     }
 }
 //=================================================================================

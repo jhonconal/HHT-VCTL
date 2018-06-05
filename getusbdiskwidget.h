@@ -12,6 +12,8 @@
 #include <QDesktopServices>
 #include <QUrl>
 
+#define  SHOW_LESS_INFO  0  //显示简洁磁盘信息
+
 namespace Ui {
 class GetUsbDiskWidget;
 }
